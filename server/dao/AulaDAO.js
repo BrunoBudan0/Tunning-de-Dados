@@ -1,22 +1,19 @@
-// Acesso ao banco de dados de aulas
-// Banco: MongoDB
-
 import mongoose from '../config/mongodb.js';
 
 const AulaSchema = new mongoose.Schema({
   nome:      String,
   descricao: String,
   video:     String,
-  id_curso:  String,
+  IDCurso:   String,   // ← nome real no banco
   ordem:     Number
 });
 
-const AulaModel = mongoose.model('Aula', AulaSchema);
+// Terceiro parâmetro = nome exato da collection no MongoDB
+const AulaModel = mongoose.model('Aula', AulaSchema, 'aulas');
 
 class AulaDAO {
-
-  async findByCurso(id_curso) {
-    return await AulaModel.find({ id_curso }).sort({ ordem: 1 });
+  async findByCurso(IDCurso) {
+    return await AulaModel.find({ IDCurso }).sort({ ordem: 1 });
   }
 
   async findById(id) {

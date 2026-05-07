@@ -1,20 +1,16 @@
-// Acesso ao banco de dados de cursos
-// Banco: MongoDB
-
 import mongoose from '../config/mongodb.js';
 
 const CourseSchema = new mongoose.Schema({
   nome_curso: String,
   descricao:  String,
   professor:  String,
-  aulas:      Array,
-  createdAt:  Date
+  IDCurso: String
 });
 
-const CourseModel = mongoose.model('Course', CourseSchema);
+// Força a collection 'cursos' em vez de 'courses'
+const CourseModel = mongoose.model('Course', CourseSchema, 'cursos');
 
 class CourseDAO {
-
   async findAll() {
     return await CourseModel.find({});
   }
