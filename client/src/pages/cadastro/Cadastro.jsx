@@ -12,45 +12,132 @@ function Cadastro() {
   const [erro, setErro] = useState('')
   const [sucesso, setSucesso] = useState('')
 
+  const [errosCampos, setErrosCampos] = useState({
+    nome: '',
+    telefone: '',
+    email: '',
+    senha: '',
+  })
+
   function validarEmail(email) {
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return regexEmail.test(email)
   }
 
-  function validarCadastro({ nome, telefone, email, senha }) {
-    if (!nome || !telefone || !email || !senha) {
-      return 'Preencha todos os campos.'
+  function validarNome(valor) {
+    const nomeTratado = valor.trim()
+
+    if (!nomeTratado) {
+      return 'Informe seu nome.'
     }
 
-    if (nome.length < 3) {
+    if (nomeTratado.length < 3) {
       return 'O nome deve ter pelo menos 3 caracteres.'
     }
 
-    if (telefone.length < 10 || telefone.length > 11) {
-      return 'O telefone deve ter 10 ou 11 números. Exemplo: 11999999999.'
+    if (!/^[A-Za-zÀ-ÿ\s]+$/.test(nomeTratado)) {
+      return 'O nome deve conter apenas letras e espaços.'
     }
 
-    if (!validarEmail(email)) {
+    return ''
+  }
+
+  function validarTelefone(valor) {
+    const telefoneTratado = valor.trim()
+
+    if (!telefoneTratado) {
+      return 'Informe seu telefone.'
+    }
+
+    if (!/^\d+$/.test(telefoneTratado)) {
+      return 'O telefone deve conter apenas números.'
+    }
+
+    if (telefoneTratado.length !== 11) {
+      return 'O telefone deve ter 11 números'
+    }
+
+    return ''
+  }
+
+  function validarCampoEmail(valor) {
+    const emailTratado = valor.trim().toLowerCase()
+
+    if (!emailTratado) {
+      return 'Informe seu email.'
+    }
+
+    if (!validarEmail(emailTratado)) {
       return 'Digite um email válido.'
     }
 
-    if (senha.length < 6) {
+    return ''
+  }
+
+  function validarSenha(valor) {
+    const senhaTratada = valor.trim()
+
+    if (!senhaTratada) {
+      return 'Informe sua senha.'
+    }
+
+    if (senhaTratada.length < 6) {
       return 'A senha deve ter pelo menos 6 caracteres.'
     }
 
-    if (!/[a-z]/.test(senha)) {
+    if (!/[a-z]/.test(senhaTratada)) {
       return 'A senha deve conter pelo menos uma letra minúscula.'
     }
 
-    if (!/[A-Z]/.test(senha)) {
+    if (!/[A-Z]/.test(senhaTratada)) {
       return 'A senha deve conter pelo menos uma letra maiúscula.'
     }
 
-    if (!/[!@#$%^&*(),.?":{}|<>_\-+=/\\[\]]/.test(senha)) {
+    if (!/[!@#$%^&*(),.?":{}|<>_\-+=/\\[\]]/.test(senhaTratada)) {
       return 'A senha deve conter pelo menos um caractere especial.'
     }
 
     return ''
+  }
+
+  function validarCampo(nomeCampo, valor) {
+    let mensagem = ''
+
+    if (nomeCampo === 'nome') {
+      mensagem = validarNome(valor)
+    }
+
+    if (nomeCampo === 'telefone') {
+      mensagem = validarTelefone(valor)
+    }
+
+    if (nomeCampo === 'email') {
+      mensagem = validarCampoEmail(valor)
+    }
+
+    if (nomeCampo === 'senha') {
+      mensagem = validarSenha(valor)
+    }
+
+    setErrosCampos((errosAtuais) => ({
+      ...errosAtuais,
+      [nomeCampo]: mensagem,
+    }))
+
+    return mensagem
+  }
+
+  function validarCadastroCompleto() {
+    const novosErros = {
+      nome: validarNome(nome),
+      telefone: validarTelefone(telefone),
+      email: validarCampoEmail(email),
+      senha: validarSenha(senha),
+    }
+
+    setErrosCampos(novosErros)
+
+    return Object.values(novosErros).some((mensagem) => mensagem)
   }
 
   async function handleCadastro(event) {
@@ -59,22 +146,17 @@ function Cadastro() {
     setErro('')
     setSucesso('')
 
+    const temErro = validarCadastroCompleto()
+
+    if (temErro) {
+      setErro('Corrija os campos destacados antes de continuar.')
+      return
+    }
+
     const nomeDigitado = nome.trim()
     const telefoneDigitado = telefone.trim()
     const emailDigitado = email.trim().toLowerCase()
     const senhaDigitada = senha.trim()
-
-    const mensagemErro = validarCadastro({
-      nome: nomeDigitado,
-      telefone: telefoneDigitado,
-      email: emailDigitado,
-      senha: senhaDigitada,
-    })
-
-    if (mensagemErro) {
-      setErro(mensagemErro)
-      return
-    }
 
     setCarregando(true)
 
@@ -108,11 +190,48 @@ function Cadastro() {
     setTelefone('')
     setEmail('')
     setSenha('')
+    setErrosCampos({
+      nome: '',
+      telefone: '',
+      email: '',
+      senha: '',
+    })
+  }
+
+  function handleNomeChange(event) {
+    const valor = event.target.value
+    setNome(valor)
+
+    if (errosCampos.nome) {
+      validarCampo('nome', valor)
+    }
   }
 
   function handleTelefoneChange(event) {
     const somenteNumeros = event.target.value.replace(/\D/g, '').slice(0, 11)
     setTelefone(somenteNumeros)
+
+    if (errosCampos.telefone) {
+      validarCampo('telefone', somenteNumeros)
+    }
+  }
+
+  function handleEmailChange(event) {
+    const valor = event.target.value
+    setEmail(valor)
+
+    if (errosCampos.email) {
+      validarCampo('email', valor)
+    }
+  }
+
+  function handleSenhaChange(event) {
+    const valor = event.target.value
+    setSenha(valor)
+
+    if (errosCampos.senha) {
+      validarCampo('senha', valor)
+    }
   }
 
   return (
@@ -138,7 +257,7 @@ function Cadastro() {
             </p>
           </div>
 
-          <form className="cadastro-form" onSubmit={handleCadastro}>
+          <form className="cadastro-form" onSubmit={handleCadastro} noValidate>
             <div className="form-group">
               <label htmlFor="nome">Nome</label>
 
@@ -148,10 +267,15 @@ function Cadastro() {
                 placeholder="Seu nome"
                 autoComplete="name"
                 value={nome}
-                minLength={3}
-                onChange={(event) => setNome(event.target.value)}
+                onChange={handleNomeChange}
+                onBlur={() => validarCampo('nome', nome)}
+                className={errosCampos.nome ? 'input-error' : ''}
                 required
               />
+
+              {errosCampos.nome && (
+                <span className="field-error">{errosCampos.nome}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -164,11 +288,16 @@ function Cadastro() {
                 placeholder="11999999999"
                 autoComplete="tel"
                 value={telefone}
-                minLength={10}
                 maxLength={11}
                 onChange={handleTelefoneChange}
+                onBlur={() => validarCampo('telefone', telefone)}
+                className={errosCampos.telefone ? 'input-error' : ''}
                 required
               />
+
+              {errosCampos.telefone && (
+                <span className="field-error">{errosCampos.telefone}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -180,9 +309,15 @@ function Cadastro() {
                 placeholder="nome@exemplo.com"
                 autoComplete="email"
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                onChange={handleEmailChange}
+                onBlur={() => validarCampo('email', email)}
+                className={errosCampos.email ? 'input-error' : ''}
                 required
               />
+
+              {errosCampos.email && (
+                <span className="field-error">{errosCampos.email}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -195,8 +330,9 @@ function Cadastro() {
                   placeholder="Mín. 6, maiúscula e especial"
                   autoComplete="new-password"
                   value={senha}
-                  minLength={6}
-                  onChange={(event) => setSenha(event.target.value)}
+                  onChange={handleSenhaChange}
+                  onBlur={() => validarCampo('senha', senha)}
+                  className={errosCampos.senha ? 'input-error' : ''}
                   required
                 />
 
@@ -210,6 +346,10 @@ function Cadastro() {
                   </span>
                 </button>
               </div>
+
+              {errosCampos.senha && (
+                <span className="field-error">{errosCampos.senha}</span>
+              )}
             </div>
 
             {erro && <p className="cadastro-error">{erro}</p>}
