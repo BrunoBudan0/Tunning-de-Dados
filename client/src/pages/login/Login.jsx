@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './Login.css'
 import { supabase } from '../../lib/supabase'
 
-function Login({ irParaCadastro }) {
+function Login({ irParaCadastro, irParaRecuperarSenha }) {
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
   const [mostrarSenha, setMostrarSenha] = useState(false)
@@ -120,7 +120,13 @@ function Login({ irParaCadastro }) {
               <div className="password-top">
                 <label htmlFor="password">Senha</label>
 
-                <a href="#">
+                <a
+                  href="#"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    irParaRecuperarSenha()
+                  }}
+                >
                   Esqueceu a senha?
                 </a>
               </div>
