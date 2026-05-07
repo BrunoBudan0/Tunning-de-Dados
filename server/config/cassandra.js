@@ -1,5 +1,4 @@
 import cassandra from 'cassandra-driver';
-import 'dotenv/config';
 
 const client = new cassandra.Client({
   contactPoints:   [process.env.CASSANDRA_CONTACT_POINTS],
