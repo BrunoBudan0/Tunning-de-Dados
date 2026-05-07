@@ -12,35 +12,71 @@ function Cadastro() {
   const [erro, setErro] = useState('')
   const [sucesso, setSucesso] = useState('')
 
+  function validarEmail(email) {
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return regexEmail.test(email)
+  }
+
+  function validarCadastro({ nome, telefone, email, senha }) {
+    if (!nome || !telefone || !email || !senha) {
+      return 'Preencha todos os campos.'
+    }
+
+    if (nome.length < 3) {
+      return 'O nome deve ter pelo menos 3 caracteres.'
+    }
+
+    if (telefone.length < 10 || telefone.length > 11) {
+      return 'O telefone deve ter 10 ou 11 números. Exemplo: 11999999999.'
+    }
+
+    if (!validarEmail(email)) {
+      return 'Digite um email válido.'
+    }
+
+    if (senha.length < 6) {
+      return 'A senha deve ter pelo menos 6 caracteres.'
+    }
+
+    if (!/[a-z]/.test(senha)) {
+      return 'A senha deve conter pelo menos uma letra minúscula.'
+    }
+
+    if (!/[A-Z]/.test(senha)) {
+      return 'A senha deve conter pelo menos uma letra maiúscula.'
+    }
+
+    if (!/[!@#$%^&*(),.?":{}|<>_\-+=/\\[\]]/.test(senha)) {
+      return 'A senha deve conter pelo menos um caractere especial.'
+    }
+
+    return ''
+  }
+
   async function handleCadastro(event) {
     event.preventDefault()
 
     setErro('')
     setSucesso('')
-    setCarregando(true)
 
     const nomeDigitado = nome.trim()
     const telefoneDigitado = telefone.trim()
-    const emailDigitado = email.trim()
+    const emailDigitado = email.trim().toLowerCase()
     const senhaDigitada = senha.trim()
 
-    if (!nomeDigitado || !telefoneDigitado || !emailDigitado || !senhaDigitada) {
-      setErro('Preencha todos os campos.')
-      setCarregando(false)
+    const mensagemErro = validarCadastro({
+      nome: nomeDigitado,
+      telefone: telefoneDigitado,
+      email: emailDigitado,
+      senha: senhaDigitada,
+    })
+
+    if (mensagemErro) {
+      setErro(mensagemErro)
       return
     }
 
-    const { data: usuarioExistente } = await supabase
-      .from('usuarios')
-      .select('id')
-      .eq('email', emailDigitado)
-      .maybeSingle()
-
-    if (usuarioExistente) {
-      setErro('Este email já está cadastrado.')
-      setCarregando(false)
-      return
-    }
+    setCarregando(true)
 
     const { error } = await supabase
       .from('usuarios')
@@ -57,7 +93,13 @@ function Cadastro() {
 
     if (error) {
       console.log('Erro Supabase:', error)
-      setErro('Erro ao cadastrar usuário.')
+
+      if (error.code === '23505') {
+        setErro('Este email já está cadastrado.')
+        return
+      }
+
+      setErro(`Erro ao cadastrar usuário: ${error.message}`)
       return
     }
 
@@ -69,7 +111,7 @@ function Cadastro() {
   }
 
   function handleTelefoneChange(event) {
-    const somenteNumeros = event.target.value.replace(/\D/g, '')
+    const somenteNumeros = event.target.value.replace(/\D/g, '').slice(0, 11)
     setTelefone(somenteNumeros)
   }
 
@@ -106,6 +148,7 @@ function Cadastro() {
                 placeholder="Seu nome"
                 autoComplete="name"
                 value={nome}
+                minLength={3}
                 onChange={(event) => setNome(event.target.value)}
                 required
               />
@@ -121,6 +164,8 @@ function Cadastro() {
                 placeholder="11999999999"
                 autoComplete="tel"
                 value={telefone}
+                minLength={10}
+                maxLength={11}
                 onChange={handleTelefoneChange}
                 required
               />
@@ -147,9 +192,10 @@ function Cadastro() {
                 <input
                   id="senha"
                   type={mostrarSenha ? 'text' : 'password'}
-                  placeholder="Crie uma senha"
+                  placeholder="Mín. 6, maiúscula e especial"
                   autoComplete="new-password"
                   value={senha}
+                  minLength={6}
                   onChange={(event) => setSenha(event.target.value)}
                   required
                 />
