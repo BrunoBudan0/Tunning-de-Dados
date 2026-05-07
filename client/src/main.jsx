@@ -7,6 +7,6 @@ import Cadastro from './pages/cadastro/Cadastro.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-   <Cadastro/>
+   <App/>
   </StrictMode>,
 )

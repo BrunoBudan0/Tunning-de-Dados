@@ -2,21 +2,37 @@ import { useState } from 'react'
 import './Login.css'
 import { supabase } from '../../lib/supabase'
 
-function Login() {
+function Login({ irParaCadastro }) {
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
   const [mostrarSenha, setMostrarSenha] = useState(false)
   const [carregando, setCarregando] = useState(false)
   const [erro, setErro] = useState('')
 
+  function validarEmail(email) {
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return regexEmail.test(email)
+  }
+
   async function handleLogin(event) {
     event.preventDefault()
 
     setErro('')
-    setCarregando(true)
 
-    const emailDigitado = email.trim()
+    const emailDigitado = email.trim().toLowerCase()
     const senhaDigitada = senha.trim()
+
+    if (!emailDigitado || !senhaDigitada) {
+      setErro('Preencha email e senha para continuar.')
+      return
+    }
+
+    if (!validarEmail(emailDigitado)) {
+      setErro('Digite um email válido.')
+      return
+    }
+
+    setCarregando(true)
 
     const { data, error } = await supabase
       .from('usuarios')
@@ -28,7 +44,19 @@ function Login() {
     setCarregando(false)
 
     if (error) {
-      setErro('Erro ao consultar o banco.')
+      console.log('Erro Supabase:', error)
+
+      if (error.message?.includes('JWT expired')) {
+        setErro('Sessão expirada. Atualize a chave do Supabase e tente novamente.')
+        return
+      }
+
+      if (error.message?.includes('row-level security')) {
+        setErro('Acesso bloqueado pela segurança do Supabase. Verifique as policies.')
+        return
+      }
+
+      setErro('Não foi possível consultar o banco agora. Tente novamente.')
       return
     }
 
@@ -57,13 +85,19 @@ function Login() {
 
             <p>
               Não tem uma conta?{' '}
-              <a href="#">
+              <a
+                href="#"
+                onClick={(event) => {
+                  event.preventDefault()
+                  irParaCadastro()
+                }}
+              >
                 Cadastre-se
               </a>
             </p>
           </div>
 
-          <form className="login-form" onSubmit={handleLogin}>
+          <form className="login-form" onSubmit={handleLogin} noValidate>
             <div className="form-group">
               <label htmlFor="email">Email</label>
 
@@ -73,7 +107,11 @@ function Login() {
                 placeholder="nome@exemplo.com"
                 autoComplete="email"
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                onChange={(event) => {
+                  setEmail(event.target.value)
+                  setErro('')
+                }}
+                className={erro ? 'input-error' : ''}
                 required
               />
             </div>
@@ -94,7 +132,11 @@ function Login() {
                   placeholder="••••••••"
                   autoComplete="current-password"
                   value={senha}
-                  onChange={(event) => setSenha(event.target.value)}
+                  onChange={(event) => {
+                    setSenha(event.target.value)
+                    setErro('')
+                  }}
+                  className={erro ? 'input-error' : ''}
                   required
                 />
 
@@ -110,7 +152,12 @@ function Login() {
               </div>
             </div>
 
-            {erro && <p className="login-error">{erro}</p>}
+            {erro && (
+              <div className="login-error">
+                <span className="login-error-icon">!</span>
+                <span>{erro}</span>
+              </div>
+            )}
 
             <button className="login-button" type="submit" disabled={carregando}>
               {carregando ? 'Entrando...' : 'Entrar'}

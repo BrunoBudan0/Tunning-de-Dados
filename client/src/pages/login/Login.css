@@ -389,3 +389,41 @@
     gap: 12px;
   }
 }
+
+.login-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -2px 0 0;
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: rgba(186, 26, 26, 0.08);
+  color: #ba1a1a;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+.login-error-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #ba1a1a;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.form-group input.input-error {
+  border-color: #ba1a1a;
+  background: #fffafa;
+}
+
+.form-group input.input-error:focus {
+  border-color: #ba1a1a;
+  box-shadow: 0 0 0 4px rgba(186, 26, 26, 0.1);
+}

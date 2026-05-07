@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './Cadastro.css'
 import { supabase } from '../../lib/supabase'
 
-function Cadastro() {
+function Cadastro({ irParaLogin }) {
   const [nome, setNome] = useState('')
   const [telefone, setTelefone] = useState('')
   const [email, setEmail] = useState('')
@@ -53,8 +53,8 @@ function Cadastro() {
       return 'O telefone deve conter apenas números.'
     }
 
-    if (telefoneTratado.length !== 11) {
-      return 'O telefone deve ter 11 números'
+    if (telefoneTratado.length < 10 || telefoneTratado.length > 11) {
+      return 'O telefone deve ter 10 ou 11 números. Exemplo: 11999999999.'
     }
 
     return ''
@@ -251,7 +251,13 @@ function Cadastro() {
 
             <p>
               Já tem uma conta?{' '}
-              <a href="#">
+              <a
+                href="#"
+                onClick={(event) => {
+                  event.preventDefault()
+                  irParaLogin()
+                }}
+              >
                 Entrar
               </a>
             </p>
