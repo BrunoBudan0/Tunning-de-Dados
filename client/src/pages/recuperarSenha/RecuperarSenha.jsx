@@ -12,29 +12,105 @@ function RecuperarSenha({ irParaLogin }) {
   const [erro, setErro] = useState('')
   const [sucesso, setSucesso] = useState('')
 
+  const [errosCampos, setErrosCampos] = useState({
+    email: '',
+    novaSenha: '',
+    confirmarSenha: '',
+  })
+
   function validarEmail(email) {
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return regexEmail.test(email)
   }
 
-  function validarSenha(senha) {
-    if (senha.length < 6) {
+  function validarCampoEmail(valor) {
+    const emailTratado = valor.trim().toLowerCase()
+
+    if (!emailTratado) {
+      return 'Informe seu email.'
+    }
+
+    if (!validarEmail(emailTratado)) {
+      return 'Digite um email válido.'
+    }
+
+    return ''
+  }
+
+  function validarSenha(valor) {
+    const senhaTratada = valor.trim()
+
+    if (!senhaTratada) {
+      return 'Informe a nova senha.'
+    }
+
+    if (senhaTratada.length < 6) {
       return 'A senha deve ter pelo menos 6 caracteres.'
     }
 
-    if (!/[a-z]/.test(senha)) {
+    if (!/[a-z]/.test(senhaTratada)) {
       return 'A senha deve conter pelo menos uma letra minúscula.'
     }
 
-    if (!/[A-Z]/.test(senha)) {
+    if (!/[A-Z]/.test(senhaTratada)) {
       return 'A senha deve conter pelo menos uma letra maiúscula.'
     }
 
-    if (!/[!@#$%^&*(),.?":{}|<>_\-+=/\\[\]]/.test(senha)) {
+    if (!/[!@#$%^&*(),.?":{}|<>_\-+=/\\[\]]/.test(senhaTratada)) {
       return 'A senha deve conter pelo menos um caractere especial.'
     }
 
     return ''
+  }
+
+  function validarConfirmacaoSenha(valorConfirmacao, valorSenha) {
+    const confirmacaoTratada = valorConfirmacao.trim()
+    const senhaTratada = valorSenha.trim()
+
+    if (!confirmacaoTratada) {
+      return 'Confirme a nova senha.'
+    }
+
+    if (confirmacaoTratada !== senhaTratada) {
+      return 'As senhas não coincidem.'
+    }
+
+    return ''
+  }
+
+  function validarCampo(nomeCampo, valor) {
+    let mensagem = ''
+
+    if (nomeCampo === 'email') {
+      mensagem = validarCampoEmail(valor)
+    }
+
+    if (nomeCampo === 'novaSenha') {
+      mensagem = validarSenha(valor)
+    }
+
+    if (nomeCampo === 'confirmarSenha') {
+      mensagem = validarConfirmacaoSenha(valor, novaSenha)
+    }
+
+    setErrosCampos((errosAtuais) => ({
+      ...errosAtuais,
+      [nomeCampo]: mensagem,
+    }))
+
+    return mensagem
+  }
+
+  function validarSenhaCompleta() {
+    const novosErros = {
+      email: '',
+      novaSenha: validarSenha(novaSenha),
+      confirmarSenha: validarConfirmacaoSenha(confirmarSenha, novaSenha),
+    }
+
+    setErrosCampos(novosErros)
+
+    return Object.values(novosErros).some((mensagem) => mensagem)
   }
 
   async function handleBuscarEmail(event) {
@@ -47,14 +123,16 @@ function RecuperarSenha({ irParaLogin }) {
     setConfirmarSenha('')
 
     const emailDigitado = email.trim().toLowerCase()
+    const erroEmail = validarCampoEmail(emailDigitado)
 
-    if (!emailDigitado) {
-      setErro('Informe seu email para continuar.')
-      return
-    }
+    setErrosCampos({
+      email: erroEmail,
+      novaSenha: '',
+      confirmarSenha: '',
+    })
 
-    if (!validarEmail(emailDigitado)) {
-      setErro('Digite um email válido.')
+    if (erroEmail) {
+      setErro('Corrija o email antes de continuar.')
       return
     }
 
@@ -89,25 +167,14 @@ function RecuperarSenha({ irParaLogin }) {
     setErro('')
     setSucesso('')
 
+    const temErro = validarSenhaCompleta()
+
+    if (temErro) {
+      setErro('Corrija os campos destacados antes de continuar.')
+      return
+    }
+
     const senhaDigitada = novaSenha.trim()
-    const confirmarSenhaDigitada = confirmarSenha.trim()
-
-    if (!senhaDigitada || !confirmarSenhaDigitada) {
-      setErro('Preencha a nova senha e a confirmação.')
-      return
-    }
-
-    const erroSenha = validarSenha(senhaDigitada)
-
-    if (erroSenha) {
-      setErro(erroSenha)
-      return
-    }
-
-    if (senhaDigitada !== confirmarSenhaDigitada) {
-      setErro('As senhas não coincidem.')
-      return
-    }
 
     setCarregando(true)
 
@@ -127,6 +194,51 @@ function RecuperarSenha({ irParaLogin }) {
     setSucesso('Senha alterada com sucesso! Você já pode voltar para o login.')
     setNovaSenha('')
     setConfirmarSenha('')
+    setErrosCampos({
+      email: '',
+      novaSenha: '',
+      confirmarSenha: '',
+    })
+  }
+
+  function handleEmailChange(event) {
+    const valor = event.target.value
+    setEmail(valor)
+    setErro('')
+    setSucesso('')
+
+    if (errosCampos.email) {
+      validarCampo('email', valor)
+    }
+  }
+
+  function handleNovaSenhaChange(event) {
+    const valor = event.target.value
+    setNovaSenha(valor)
+    setErro('')
+    setSucesso('')
+
+    if (errosCampos.novaSenha) {
+      validarCampo('novaSenha', valor)
+    }
+
+    if (errosCampos.confirmarSenha) {
+      setErrosCampos((errosAtuais) => ({
+        ...errosAtuais,
+        confirmarSenha: validarConfirmacaoSenha(confirmarSenha, valor),
+      }))
+    }
+  }
+
+  function handleConfirmarSenhaChange(event) {
+    const valor = event.target.value
+    setConfirmarSenha(valor)
+    setErro('')
+    setSucesso('')
+
+    if (errosCampos.confirmarSenha) {
+      validarCampo('confirmarSenha', valor)
+    }
   }
 
   return (
@@ -160,14 +272,15 @@ function RecuperarSenha({ irParaLogin }) {
                   placeholder="nome@exemplo.com"
                   autoComplete="email"
                   value={email}
-                  onChange={(event) => {
-                    setEmail(event.target.value)
-                    setErro('')
-                    setSucesso('')
-                  }}
-                  className={erro ? 'input-error' : ''}
+                  onChange={handleEmailChange}
+                  onBlur={() => validarCampo('email', email)}
+                  className={errosCampos.email ? 'input-error' : ''}
                   required
                 />
+
+                {errosCampos.email && (
+                  <span className="field-error">{errosCampos.email}</span>
+                )}
               </div>
 
               {erro && (
@@ -215,12 +328,9 @@ function RecuperarSenha({ irParaLogin }) {
                     placeholder="Mín. 6, maiúscula e especial"
                     autoComplete="new-password"
                     value={novaSenha}
-                    onChange={(event) => {
-                      setNovaSenha(event.target.value)
-                      setErro('')
-                      setSucesso('')
-                    }}
-                    className={erro ? 'input-error' : ''}
+                    onChange={handleNovaSenhaChange}
+                    onBlur={() => validarCampo('novaSenha', novaSenha)}
+                    className={errosCampos.novaSenha ? 'input-error' : ''}
                     required
                   />
 
@@ -234,6 +344,10 @@ function RecuperarSenha({ irParaLogin }) {
                     </span>
                   </button>
                 </div>
+
+                {errosCampos.novaSenha && (
+                  <span className="field-error">{errosCampos.novaSenha}</span>
+                )}
               </div>
 
               <div className="form-group">
@@ -245,14 +359,15 @@ function RecuperarSenha({ irParaLogin }) {
                   placeholder="Repita a nova senha"
                   autoComplete="new-password"
                   value={confirmarSenha}
-                  onChange={(event) => {
-                    setConfirmarSenha(event.target.value)
-                    setErro('')
-                    setSucesso('')
-                  }}
-                  className={erro ? 'input-error' : ''}
+                  onChange={handleConfirmarSenhaChange}
+                  onBlur={() => validarCampo('confirmarSenha', confirmarSenha)}
+                  className={errosCampos.confirmarSenha ? 'input-error' : ''}
                   required
                 />
+
+                {errosCampos.confirmarSenha && (
+                  <span className="field-error">{errosCampos.confirmarSenha}</span>
+                )}
               </div>
 
               {erro && (

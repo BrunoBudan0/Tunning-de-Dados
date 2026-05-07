@@ -21,7 +21,7 @@
 
 .recover-card {
   width: 100%;
-  max-width: 340px;
+  max-width: 350px;
   padding: 24px;
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.84);
@@ -425,4 +425,22 @@
 
 .password-wrapper button:hover {
   color: #630ed4;
+}
+
+.field-error {
+  margin-top: -2px;
+  color: #ba1a1a;
+  font-size: 11px;
+  line-height: 15px;
+  font-weight: 600;
+}
+
+.form-group input.input-error {
+  border-color: #ba1a1a;
+  background: #fffafa;
+}
+
+.form-group input.input-error:focus {
+  border-color: #ba1a1a;
+  box-shadow: 0 0 0 4px rgba(186, 26, 26, 0.1);
 }

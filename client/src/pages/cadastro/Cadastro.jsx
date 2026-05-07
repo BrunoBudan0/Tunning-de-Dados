@@ -53,8 +53,8 @@ function Cadastro({ irParaLogin }) {
       return 'O telefone deve conter apenas números.'
     }
 
-    if (telefoneTratado.length < 10 || telefoneTratado.length > 11) {
-      return 'O telefone deve ter 10 ou 11 números. Exemplo: 11999999999.'
+    if (telefoneTratado.length !== 11) {
+      return 'O telefone deve ter exatamente 11 números. Exemplo: 11999999999.'
     }
 
     return ''
@@ -201,6 +201,8 @@ function Cadastro({ irParaLogin }) {
   function handleNomeChange(event) {
     const valor = event.target.value
     setNome(valor)
+    setErro('')
+    setSucesso('')
 
     if (errosCampos.nome) {
       validarCampo('nome', valor)
@@ -210,6 +212,8 @@ function Cadastro({ irParaLogin }) {
   function handleTelefoneChange(event) {
     const somenteNumeros = event.target.value.replace(/\D/g, '').slice(0, 11)
     setTelefone(somenteNumeros)
+    setErro('')
+    setSucesso('')
 
     if (errosCampos.telefone) {
       validarCampo('telefone', somenteNumeros)
@@ -219,6 +223,8 @@ function Cadastro({ irParaLogin }) {
   function handleEmailChange(event) {
     const valor = event.target.value
     setEmail(valor)
+    setErro('')
+    setSucesso('')
 
     if (errosCampos.email) {
       validarCampo('email', valor)
@@ -228,6 +234,8 @@ function Cadastro({ irParaLogin }) {
   function handleSenhaChange(event) {
     const valor = event.target.value
     setSenha(valor)
+    setErro('')
+    setSucesso('')
 
     if (errosCampos.senha) {
       validarCampo('senha', valor)
