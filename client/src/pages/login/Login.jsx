@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './Login.css'
 import { supabase } from '../../lib/supabase'
 
-function Login({ irParaCadastro, irParaRecuperarSenha }) {
+function Login({ irParaCadastro, irParaRecuperarSenha, aoLogin }) {
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
   const [mostrarSenha, setMostrarSenha] = useState(false)
@@ -16,7 +16,6 @@ function Login({ irParaCadastro, irParaRecuperarSenha }) {
 
   async function handleLogin(event) {
     event.preventDefault()
-
     setErro('')
 
     const emailDigitado = email.trim().toLowerCase()
@@ -50,7 +49,6 @@ function Login({ irParaCadastro, irParaRecuperarSenha }) {
         setErro('Sessão expirada. Atualize a chave do Supabase e tente novamente.')
         return
       }
-
       if (error.message?.includes('row-level security')) {
         setErro('Acesso bloqueado pela segurança do Supabase. Verifique as policies.')
         return
@@ -65,7 +63,8 @@ function Login({ irParaCadastro, irParaRecuperarSenha }) {
       return
     }
 
-    alert(`Bem-vinda, ${data.nome}!`)
+    // Repassa o usuário autenticado para o App.jsx — sem alert
+    aoLogin(data)
   }
 
   return (
@@ -76,13 +75,11 @@ function Login({ irParaCadastro, irParaRecuperarSenha }) {
             <div className="login-logo">
               <span>C</span>
             </div>
-
             <span className="login-brand">Cursos</span>
           </div>
 
           <div className="login-title">
             <h1>Entrar na plataforma</h1>
-
             <p>
               Não tem uma conta?{' '}
               <a
@@ -100,7 +97,6 @@ function Login({ irParaCadastro, irParaRecuperarSenha }) {
           <form className="login-form" onSubmit={handleLogin} noValidate>
             <div className="form-group">
               <label htmlFor="email">Email</label>
-
               <input
                 id="email"
                 type="email"
@@ -119,7 +115,6 @@ function Login({ irParaCadastro, irParaRecuperarSenha }) {
             <div className="form-group">
               <div className="password-top">
                 <label htmlFor="password">Senha</label>
-
                 <a
                   href="#"
                   onClick={(event) => {
@@ -145,7 +140,6 @@ function Login({ irParaCadastro, irParaRecuperarSenha }) {
                   className={erro ? 'input-error' : ''}
                   required
                 />
-
                 <button
                   type="button"
                   aria-label="Mostrar senha"
@@ -173,10 +167,7 @@ function Login({ irParaCadastro, irParaRecuperarSenha }) {
       </main>
 
       <footer className="login-footer">
-        <div>
-          © 2024 E-Cursos. Lifelong learning for everyone.
-        </div>
-
+        <div>© 2024 E-Cursos. Lifelong learning for everyone.</div>
         <nav>
           <a href="#">Termos</a>
           <a href="#">Privacidade</a>
