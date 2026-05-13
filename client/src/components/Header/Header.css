@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height: 52px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(204, 195, 216, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* ── Esquerda ── */
+.header-esquerda {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #630ed4 0%, #9d50ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(99, 14, 212, 0.25);
+}
+
+.header-logo span {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.header-marca {
+  font-size: 15px;
+  font-weight: 700;
+  color: #121c2a;
+  letter-spacing: -0.02em;
+}
+
+.header-separador {
+  color: #ccc3d8;
+  font-size: 15px;
+  font-weight: 400;
+  user-select: none;
+}
+
+.header-titulo {
+  font-size: 15px;
+  font-weight: 500;
+  color: #4a4455;
+}
+
+/* ── Direita ── */
+.header-direita {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-icone-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4a4455;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.header-icone-btn:hover {
+  background: rgba(124, 58, 237, 0.07);
+  color: #630ed4;
+}
+
+/* Notificação com dot */
+.header-notif-btn {
+  position: relative;
+}
+
+.header-notif-dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  border: 1.5px solid #fff;
+}
+
+/* Avatar */
+.header-avatar-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  margin-left: 4px;
+  transition: opacity 0.15s;
+}
+
+.header-avatar-btn:hover {
+  opacity: 0.85;
+}
+
+.header-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #630ed4, #9d50ff);
+  overflow: hidden;
+  border: 2px solid rgba(124, 58, 237, 0.2);
+}
+
+.header-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
