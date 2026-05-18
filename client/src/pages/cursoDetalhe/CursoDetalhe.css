@@ -1,0 +1,172 @@
+.detalhe-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.detalhe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background: #fff;
+  border-bottom: 1px solid #e3e6ef;
+  color: #4a5072;
+}
+
+.detalhe-back {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  color: #3b5bdb;
+  padding: 6px 0;
+}
+
+.detalhe-back:hover {
+  text-decoration: underline;
+}
+
+.detalhe-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.detalhe-main h1 {
+  margin: 0 0 4px;
+  color: #1a1f36;
+}
+
+.detalhe-prof {
+  margin: 0 0 16px;
+  color: #6a708c;
+  font-size: 14px;
+}
+
+.detalhe-desc {
+  margin: 0 0 24px;
+  color: #4a5072;
+}
+
+.detalhe-progresso {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.detalhe-progresso-bar {
+  flex: 1;
+  height: 10px;
+  background: #e3e6ef;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.detalhe-progresso-fill {
+  height: 100%;
+  background: #3b5bdb;
+  transition: width 0.3s ease;
+}
+
+.detalhe-progresso span {
+  font-size: 14px;
+  color: #4a5072;
+  min-width: 100px;
+  text-align: right;
+}
+
+.detalhe-error {
+  padding: 12px 16px;
+  background: #fef3f2;
+  border: 1px solid #fda4a4;
+  color: #9b1c1c;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.detalhe-main h2 {
+  margin: 16px 0 12px;
+  color: #1a1f36;
+}
+
+.aulas-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.aula-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e3e6ef;
+  border-radius: 10px;
+  padding: 16px 20px;
+  gap: 16px;
+}
+
+.aula-item.concluida {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.aula-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+
+.aula-ordem {
+  font-weight: 600;
+  color: #6a708c;
+}
+
+.aula-info h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: #1a1f36;
+}
+
+.aula-info p {
+  margin: 0 0 6px;
+  color: #4a5072;
+  font-size: 14px;
+}
+
+.aula-info a {
+  font-size: 13px;
+  color: #3b5bdb;
+  text-decoration: none;
+}
+
+.aula-info a:hover {
+  text-decoration: underline;
+}
+
+.aula-button {
+  padding: 8px 16px;
+  background: #3b5bdb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.aula-button:hover:not(:disabled) {
+  background: #2f47b3;
+}
+
+.aula-button:disabled {
+  background: #86efac;
+  color: #166534;
+  cursor: default;
+}
