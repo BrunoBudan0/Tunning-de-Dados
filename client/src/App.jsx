@@ -63,6 +63,7 @@ function App() {
     return (
       <DetalheCurso
         cursoInicial={cursoSelecionado}
+        usuario={usuarioLogado}
         aoNavegar={aoNavegar}
         aoVoltar={() => setPaginaAtual('catalogo')}
       />

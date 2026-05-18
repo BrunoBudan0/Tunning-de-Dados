@@ -120,6 +120,9 @@ const CATEGORIAS = ['Todos', 'Programação', 'Design', 'Data Science', 'Marketi
 function normalizarCurso(raw) {
   return {
     _id:             raw._id,
+    IDCurso:         raw.IDCurso        ?? raw._id,
+    descricao:       raw.descricao      ?? '',
+    professor:       raw.professor      ?? '',
     nome_curso:      raw.nome_curso      ?? 'Sem título',
     categoria:       raw.categoria       ?? 'Programação',
     nivel:           raw.nivel           ?? 'Iniciante',
