@@ -1,8 +1,30 @@
 const BASE_URL = 'http://localhost:3000/api';
 
+async function readError(res, fallback) {
+  try {
+    const body = await res.json();
+    return body.error || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export async function getProgresso(id_usuario, id_curso) {
   const res = await fetch(`${BASE_URL}/progresso/${id_usuario}/${id_curso}`);
-  if (!res.ok) throw new Error('Erro ao buscar progresso');
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(await readError(res, 'Erro ao buscar progresso'));
+  return res.json();
+}
+
+export async function getMatriculas(id_usuario) {
+  const res = await fetch(`${BASE_URL}/progresso/matriculas/${id_usuario}`);
+  if (!res.ok) throw new Error(await readError(res, 'Erro ao buscar matrículas'));
+  return res.json();
+}
+
+export async function getAulasUsuario(id_usuario) {
+  const res = await fetch(`${BASE_URL}/progresso/aulas/${id_usuario}`);
+  if (!res.ok) throw new Error(await readError(res, 'Erro ao buscar status das aulas'));
   return res.json();
 }
 
@@ -12,26 +34,26 @@ export async function salvarProgresso(id_usuario, id_curso, progresso) {
     headers: { 'Content-Type': 'application/json' },
     body:    JSON.stringify({ id_usuario, id_curso, progresso })
   });
-  if (!res.ok) throw new Error('Erro ao salvar progresso');
+  if (!res.ok) throw new Error(await readError(res, 'Erro ao salvar progresso'));
   return res.json();
 }
 
-export async function matricular(id_usuario, id_curso) {
+export async function matricular(id_usuario, id_curso, ids_aulas = []) {
   const res = await fetch(`${BASE_URL}/progresso/matricular`, {
     method:  'POST',
     headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify({ id_usuario, id_curso })
+    body:    JSON.stringify({ id_usuario, id_curso, ids_aulas })
   });
-  if (!res.ok) throw new Error('Erro ao matricular');
+  if (!res.ok) throw new Error(await readError(res, 'Erro ao matricular'));
   return res.json();
 }
 
-export async function concluirAula(id_usuario, id_aula) {
+export async function concluirAula(id_usuario, id_aula, id_curso, progresso_atual) {
   const res = await fetch(`${BASE_URL}/progresso/aula`, {
     method:  'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify({ id_usuario, id_aula })
+    body:    JSON.stringify({ id_usuario, id_aula, id_curso, progresso_atual })
   });
-  if (!res.ok) throw new Error('Erro ao concluir aula');
+  if (!res.ok) throw new Error(await readError(res, 'Erro ao concluir aula'));
   return res.json();
 }

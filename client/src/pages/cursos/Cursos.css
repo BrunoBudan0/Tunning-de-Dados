@@ -1,0 +1,146 @@
+.cursos-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.cursos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background: #fff;
+  border-bottom: 1px solid #e3e6ef;
+}
+
+.cursos-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.cursos-logo > span:first-child {
+  width: 32px;
+  height: 32px;
+  background: #3b5bdb;
+  color: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.cursos-brand {
+  font-size: 18px;
+  color: #1a1f36;
+}
+
+.cursos-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #4a5072;
+}
+
+.cursos-user button {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid #c8cce0;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #1a1f36;
+}
+
+.cursos-user button:hover {
+  background: #eef0f8;
+}
+
+.cursos-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.cursos-main h1 {
+  margin: 0 0 24px;
+  color: #1a1f36;
+}
+
+.cursos-error {
+  padding: 12px 16px;
+  background: #fef3f2;
+  border: 1px solid #fda4a4;
+  color: #9b1c1c;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.cursos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.curso-card {
+  background: #fff;
+  border: 1px solid #e3e6ef;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.curso-card h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #1a1f36;
+}
+
+.curso-prof {
+  margin: 0;
+  font-size: 13px;
+  color: #6a708c;
+}
+
+.curso-desc {
+  margin: 0;
+  font-size: 14px;
+  color: #4a5072;
+  flex: 1;
+}
+
+.curso-actions {
+  margin-top: 8px;
+}
+
+.curso-button {
+  width: 100%;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #3b5bdb;
+  color: #3b5bdb;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.curso-button:hover:not(:disabled) {
+  background: #eef2ff;
+}
+
+.curso-button.primary {
+  background: #3b5bdb;
+  color: #fff;
+}
+
+.curso-button.primary:hover {
+  background: #2f47b3;
+}
+
+.curso-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

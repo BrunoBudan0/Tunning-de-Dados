@@ -1,13 +1,21 @@
 import cassandra from 'cassandra-driver';
 
+const { CASSANDRA_CONTACT_POINTS, CASSANDRA_DATACENTER, CASSANDRA_KEYSPACE } = process.env;
+
+if (!CASSANDRA_CONTACT_POINTS || !CASSANDRA_DATACENTER || !CASSANDRA_KEYSPACE) {
+  console.warn('Cassandra: variáveis de ambiente não configuradas — conexão ignorada.');
+}
+
 const client = new cassandra.Client({
-  contactPoints:  process.env.CASSANDRA_CONTACT_POINTS.split(','),
-  localDataCenter: process.env.CASSANDRA_DATACENTER,
-  keyspace:        process.env.CASSANDRA_KEYSPACE
+  contactPoints:   CASSANDRA_CONTACT_POINTS ? CASSANDRA_CONTACT_POINTS.split(',') : ['localhost'],
+  localDataCenter: CASSANDRA_DATACENTER || 'datacenter1',
+  keyspace:        CASSANDRA_KEYSPACE   || undefined
 });
 
-await client.connect()
-  .then(() => console.log('Cassandra conectado'))
-  .catch(err => console.error('Erro Cassandra:', err));
+if (CASSANDRA_CONTACT_POINTS) {
+  client.connect()
+    .then(() => console.log('Cassandra conectado'))
+    .catch(err => console.error('Erro Cassandra:', err.message));
+}
 
 export default client;

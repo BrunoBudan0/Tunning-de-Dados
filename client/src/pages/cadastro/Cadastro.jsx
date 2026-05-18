@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './Cadastro.css'
-import { supabase } from '../../lib/supabase'
+import { createUser } from '../../services/userService'
 
 function Cadastro({ irParaLogin }) {
   const [nome, setNome] = useState('')
@@ -160,32 +160,21 @@ function Cadastro({ irParaLogin }) {
 
     setCarregando(true)
 
-    const { error } = await supabase
-      .from('usuarios')
-      .insert([
-        {
-          nome: nomeDigitado,
-          telefone: telefoneDigitado,
-          email: emailDigitado,
-          senha: senhaDigitada,
-        },
-      ])
-
-    setCarregando(false)
-
-    if (error) {
-      console.log('Erro Supabase:', error)
-
-      if (error.code === '23505') {
-        setErro('Este email já está cadastrado.')
-        return
-      }
-
-      setErro(`Erro ao cadastrar usuário: ${error.message}`)
+    try {
+      await createUser({
+        nome: nomeDigitado,
+        telefone: telefoneDigitado,
+        email: emailDigitado,
+        senha: senhaDigitada,
+      })
+      setSucesso('Cadastro realizado com sucesso!')
+    } catch (err) {
+      setErro(err.message)
+      setCarregando(false)
       return
     }
 
-    setSucesso('Cadastro realizado com sucesso!')
+    setCarregando(false)
     setNome('')
     setTelefone('')
     setEmail('')
