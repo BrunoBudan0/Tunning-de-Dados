@@ -218,8 +218,6 @@ CASSANDRA_KEYSPACE=ead
 PORT=3000
 ```
 
-> ⚠️ Nunca comite o `.env` no Git. As credenciais ficam apenas localmente.
-
 ### Estrutura do keyspace Cassandra
 
 ```cql
