@@ -2,11 +2,11 @@
 // Armazenado no MongoDB
 
 class Aula {
-  constructor({ nome, descricao, video, id_curso, ordem }) {
+  constructor({ nome, descricao, video, IDCurso, ordem }) {
     this.nome      = nome;
     this.descricao = descricao;
     this.video     = video;
-    this.id_curso  = id_curso;
+    this.IDCurso   = IDCurso;
     this.ordem     = ordem;
   }
 

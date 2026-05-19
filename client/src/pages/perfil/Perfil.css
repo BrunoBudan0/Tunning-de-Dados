@@ -56,14 +56,21 @@
   height: 88px;
 }
 
-.perfil-avatar-img {
+.perfil-avatar-iniciais {
   width: 88px;
   height: 88px;
   border-radius: 16px;
-  object-fit: cover;
   border: 4px solid #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  display: block;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  user-select: none;
 }
 
 .perfil-avatar-camera {
@@ -502,9 +509,10 @@
     height: 74px;
   }
 
-  .perfil-avatar-img {
+  .perfil-avatar-iniciais {
     width: 74px;
     height: 74px;
+    font-size: 22px;
   }
 
   .perfil-info {

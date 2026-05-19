@@ -3,12 +3,16 @@ import CursosUsuarioDAO  from '../dao/CursosUsuarioDAO.js';
 import AulaUsuarioDAO    from '../dao/AulaUsuarioDAO.js';
 import CursoUsuario      from '../models/CursoUsuario.js';
 
+// Cassandra está modelado com colunas text — garanta strings em todos os IDs
+const s = (v) => v === null || v === undefined ? v : String(v);
+
 class ProgressoController {
 
   // GET /api/progresso/:id_usuario/:id_curso
   async buscar(req, res) {
     try {
-      const { id_usuario, id_curso } = req.params;
+      const id_usuario = s(req.params.id_usuario);
+      const id_curso   = s(req.params.id_curso);
       const progresso = await ProgressoDAO.buscar(id_usuario, id_curso);
 
       if (!progresso) {
@@ -24,8 +28,30 @@ class ProgressoController {
   // GET /api/progresso/:id_usuario
   async buscarTodos(req, res) {
     try {
-      const { id_usuario } = req.params;
+      const id_usuario = s(req.params.id_usuario);
       const lista = await ProgressoDAO.buscarTodosPorUsuario(id_usuario);
+      res.json(lista);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  // GET /api/progresso/matriculas/:id_usuario
+  async buscarMatriculas(req, res) {
+    try {
+      const id_usuario = s(req.params.id_usuario);
+      const lista = await CursosUsuarioDAO.buscarPorUsuario(id_usuario);
+      res.json(lista);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  // GET /api/progresso/aulas/:id_usuario
+  async buscarAulasUsuario(req, res) {
+    try {
+      const id_usuario = s(req.params.id_usuario);
+      const lista = await AulaUsuarioDAO.buscarPorUsuario(id_usuario);
       res.json(lista);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -35,7 +61,9 @@ class ProgressoController {
   // POST /api/progresso
   async salvar(req, res) {
     try {
-      const { id_usuario, id_curso, progresso } = req.body;
+      const id_usuario = s(req.body.id_usuario);
+      const id_curso   = s(req.body.id_curso);
+      const { progresso } = req.body;
       const salvo = await ProgressoDAO.salvar(id_usuario, id_curso, progresso);
       res.status(201).json(salvo);
     } catch (err) {
@@ -44,18 +72,15 @@ class ProgressoController {
   }
 
   // POST /api/progresso/matricular
-  // Matricula o usuário E já registra as aulas como 'nao_iniciada'
   async matricular(req, res) {
     try {
-      const { id_usuario, id_curso, ids_aulas = [] } = req.body;
+      const id_usuario = s(req.body.id_usuario);
+      const id_curso   = s(req.body.id_curso);
+      const ids_aulas  = (req.body.ids_aulas || []).map(s);
 
-      // 1. Cria a matrícula no curso
       const matricula = await CursosUsuarioDAO.matricular(id_usuario, id_curso);
-
-      // 2. Inicializa o progresso zerado
       await ProgressoDAO.salvar(id_usuario, id_curso, 0);
 
-      // 3. Registra cada aula como 'nao_iniciada' (se os IDs foram enviados)
       await Promise.all(
         ids_aulas.map(id_aula => AulaUsuarioDAO.registrar(id_usuario, id_aula))
       );
@@ -67,19 +92,18 @@ class ProgressoController {
   }
 
   // PATCH /api/progresso/aula
-  // Conclui uma aula e atualiza o status da matrícula se necessário
   async concluirAula(req, res) {
     try {
-      const { id_usuario, id_aula, id_curso, progresso_atual } = req.body;
+      const id_usuario     = s(req.body.id_usuario);
+      const id_aula        = s(req.body.id_aula);
+      const id_curso       = s(req.body.id_curso);
+      const { progresso_atual } = req.body;
 
-      // 1. Marca a aula como concluída
       await AulaUsuarioDAO.concluirAula(id_usuario, id_aula);
 
-      // 2. Atualiza o progresso percentual do curso
       if (id_curso !== undefined && progresso_atual !== undefined) {
         const salvo = await ProgressoDAO.salvar(id_usuario, id_curso, progresso_atual);
 
-        // 3. Se chegou a 100%, marca a matrícula como concluída automaticamente
         if (salvo.estaConcluido()) {
           await CursosUsuarioDAO.atualizarStatus(
             id_usuario,

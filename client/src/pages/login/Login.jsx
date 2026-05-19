@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './Login.css'
-import { supabase } from '../../lib/supabase'
+import { login as loginUser } from '../../services/userService'
 
 function Login({ irParaCadastro, irParaRecuperarSenha, aoLogin }) {
   const [email, setEmail] = useState('')
@@ -33,38 +33,14 @@ function Login({ irParaCadastro, irParaRecuperarSenha, aoLogin }) {
 
     setCarregando(true)
 
-    const { data, error } = await supabase
-      .from('usuarios')
-      .select('id, nome, telefone, email, senha')
-      .eq('email', emailDigitado)
-      .eq('senha', senhaDigitada)
-      .maybeSingle()
-
-    setCarregando(false)
-
-    if (error) {
-      console.log('Erro Supabase:', error)
-
-      if (error.message?.includes('JWT expired')) {
-        setErro('Sessão expirada. Atualize a chave do Supabase e tente novamente.')
-        return
-      }
-      if (error.message?.includes('row-level security')) {
-        setErro('Acesso bloqueado pela segurança do Supabase. Verifique as policies.')
-        return
-      }
-
-      setErro('Não foi possível consultar o banco agora. Tente novamente.')
-      return
+    try {
+      const data = await loginUser(emailDigitado, senhaDigitada)
+      aoLogin(data)
+    } catch (err) {
+      setErro(err.message)
+    } finally {
+      setCarregando(false)
     }
-
-    if (!data) {
-      setErro('Email ou senha inválidos.')
-      return
-    }
-
-    // Repassa o usuário autenticado para o App.jsx — sem alert
-    aoLogin(data)
   }
 
   return (

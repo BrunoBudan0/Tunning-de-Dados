@@ -1,0 +1,502 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* ════════════════════════════════════════
+   Página
+════════════════════════════════════════ */
+.admin-pagina {
+  min-height: 100vh;
+  background: #f5f7fb;
+  font-family: Inter, system-ui, sans-serif;
+  color: #121c2a;
+}
+
+.admin-conteudo {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ════════════════════════════════════════
+   Cabeçalho
+════════════════════════════════════════ */
+.admin-cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: admin-fade-up 0.4s ease both;
+}
+
+.admin-titulo {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #0d0a1e;
+}
+
+.admin-subtitulo {
+  margin: 0;
+  font-size: 14px;
+  color: #7b7487;
+  font-weight: 500;
+}
+
+/* ════════════════════════════════════════
+   Tabs
+════════════════════════════════════════ */
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1.5px solid rgba(204, 195, 216, 0.5);
+  width: fit-content;
+  animation: admin-fade-up 0.4s 0.05s ease both;
+}
+
+.admin-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: Inter, sans-serif;
+  color: #7b7487;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.admin-tab:hover {
+  color: #4c1d95;
+}
+
+.admin-tab--ativa {
+  background: #7c3aed;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+}
+
+.admin-tab--ativa:hover {
+  color: #ffffff;
+}
+
+/* ════════════════════════════════════════
+   Alertas
+════════════════════════════════════════ */
+.admin-alerta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  animation: admin-fade-up 0.3s ease both;
+}
+
+.admin-alerta--sucesso {
+  background: rgba(16, 185, 129, 0.1);
+  color: #065f46;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.admin-alerta--erro {
+  background: rgba(239, 68, 68, 0.1);
+  color: #991b1b;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.admin-alerta-fechar {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+  padding: 4px;
+  border-radius: 6px;
+  display: inline-flex;
+}
+
+.admin-alerta-fechar:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* ════════════════════════════════════════
+   Form / Cards
+════════════════════════════════════════ */
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.admin-card {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1.5px solid rgba(204, 195, 216, 0.5);
+  padding: 24px;
+  animation: admin-fade-up 0.4s 0.1s ease both;
+}
+
+.admin-card-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.admin-card-titulo {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0d0a1e;
+}
+
+.admin-card-sub {
+  margin: 0;
+  font-size: 13px;
+  color: #7b7487;
+}
+
+/* ════════════════════════════════════════
+   Campos
+════════════════════════════════════════ */
+.admin-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.admin-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.admin-campo:last-child {
+  margin-bottom: 0;
+}
+
+.admin-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2c2640;
+}
+
+.admin-required {
+  color: #ef4444;
+}
+
+.admin-hint {
+  font-size: 12px;
+  color: #a89fb5;
+}
+
+.admin-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1.5px solid rgba(204, 195, 216, 0.6);
+  border-radius: 12px;
+  background: #ffffff;
+  font-size: 14px;
+  font-family: Inter, sans-serif;
+  color: #121c2a;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  box-sizing: border-box;
+}
+
+.admin-input::placeholder { color: #b0a8bc; }
+
+.admin-input:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.08);
+}
+
+.admin-textarea {
+  height: auto;
+  padding: 12px 14px;
+  resize: vertical;
+  font-family: Inter, sans-serif;
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════════════
+   Aulas
+════════════════════════════════════════ */
+.admin-aulas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-aula-item {
+  padding: 16px;
+  border: 1.5px dashed rgba(124, 58, 237, 0.25);
+  border-radius: 14px;
+  background: rgba(124, 58, 237, 0.03);
+  animation: admin-fade-up 0.3s ease both;
+}
+
+.admin-aula-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.admin-aula-numero {
+  font-size: 13px;
+  font-weight: 700;
+  color: #7c3aed;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-aula-remover {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: Inter, sans-serif;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.18s;
+}
+
+.admin-aula-remover:hover {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+/* ════════════════════════════════════════
+   Botões
+════════════════════════════════════════ */
+.admin-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.admin-btn-primario {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 12px;
+  background: #7c3aed;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: Inter, sans-serif;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+}
+
+.admin-btn-primario:hover:not(:disabled) {
+  background: #6d28d9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.32);
+}
+
+.admin-btn-primario:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-btn-secundario {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: 1.5px solid rgba(204, 195, 216, 0.6);
+  border-radius: 12px;
+  background: #ffffff;
+  color: #4c1d95;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: Inter, sans-serif;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s;
+}
+
+.admin-btn-secundario:hover:not(:disabled) {
+  border-color: #7c3aed;
+  background: rgba(124, 58, 237, 0.04);
+}
+
+.admin-btn-secundario:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-btn-perigo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1.5px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
+  background: #ffffff;
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: Inter, sans-serif;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s;
+  flex-shrink: 0;
+}
+
+.admin-btn-perigo:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: #ef4444;
+}
+
+.admin-btn-perigo:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ════════════════════════════════════════
+   Lista de cursos (gerenciar)
+════════════════════════════════════════ */
+.admin-cursos-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-curso-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1.5px solid rgba(204, 195, 216, 0.5);
+  border-radius: 14px;
+  background: #fafafd;
+  transition: border-color 0.18s, transform 0.18s;
+}
+
+.admin-curso-item:hover {
+  border-color: rgba(124, 58, 237, 0.4);
+  transform: translateY(-1px);
+}
+
+.admin-curso-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.admin-curso-id {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #7c3aed;
+  background: rgba(124, 58, 237, 0.08);
+  padding: 2px 8px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.admin-curso-nome {
+  margin: 2px 0 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0d0a1e;
+  letter-spacing: -0.01em;
+}
+
+.admin-curso-prof {
+  font-size: 13px;
+  color: #7b7487;
+  font-weight: 500;
+}
+
+.admin-curso-desc {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #5d5670;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ════════════════════════════════════════
+   Estado vazio
+════════════════════════════════════════ */
+.admin-lista-vazia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  color: #7b7487;
+  gap: 12px;
+}
+
+.admin-lista-vazia svg {
+  color: #c8c1d6;
+}
+
+.admin-lista-vazia p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* ════════════════════════════════════════
+   Spacer / Animação
+════════════════════════════════════════ */
+.admin-spacer-bottom {
+  height: 120px;
+}
+
+@keyframes admin-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ════════════════════════════════════════
+   Responsivo
+════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .admin-conteudo { padding: 20px 16px 0; }
+  .admin-titulo   { font-size: 22px; }
+  .admin-grid-2   { grid-template-columns: 1fr; }
+  .admin-card     { padding: 18px; }
+  .admin-curso-item { flex-direction: column; align-items: stretch; }
+  .admin-btn-perigo { align-self: flex-end; }
+  .admin-tabs { width: 100%; }
+  .admin-tab { flex: 1; justify-content: center; }
+}

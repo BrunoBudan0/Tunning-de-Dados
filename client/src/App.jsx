@@ -6,6 +6,7 @@ import Home from './pages/home/Home'
 import Perfil from './pages/perfil/Perfil'
 import Catalogo from './pages/catalogo/Catalogo'
 import DetalheCurso from './pages/detalhe-curso/DetalheCurso'
+import Admin from './pages/admin/Admin'
 
 function App() {
   const [paginaAtual, setPaginaAtual]         = useState('login')
@@ -32,6 +33,7 @@ function App() {
       dashboard: 'home',      // placeholder
       cursos:    'home',      // placeholder
       perfil:    'perfil',
+      admin:     'admin',
       cadastro:  'cadastro',
     }
     setPaginaAtual(mapa[pagina] ?? pagina)
@@ -63,10 +65,15 @@ function App() {
     return (
       <DetalheCurso
         cursoInicial={cursoSelecionado}
+        usuario={usuarioLogado}
         aoNavegar={aoNavegar}
         aoVoltar={() => setPaginaAtual('catalogo')}
       />
     )
+  }
+
+  if (paginaAtual === 'admin') {
+    return <Admin aoNavegar={aoNavegar} />
   }
 
   if (paginaAtual === 'perfil') {

@@ -2,7 +2,8 @@
 // Armazenado no MongoDB
 
 class Course {
-  constructor({ nome_curso, descricao, professor, aulas = [] }) {
+  constructor({ IDCurso, nome_curso, descricao, professor, aulas = [] }) {
+    this.IDCurso    = IDCurso;
     this.nome_curso = nome_curso;
     this.descricao  = descricao;
     this.professor  = professor;

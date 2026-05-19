@@ -330,8 +330,15 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  object-fit: cover;
   flex-shrink: 0;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 700;
+  user-select: none;
 }
 
 /* Meta: duração + alunos */

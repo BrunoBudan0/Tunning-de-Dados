@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './RecuperarSenha.css'
-import { supabase } from '../../lib/supabase'
+import { buscarPorEmail, atualizarSenha } from '../../services/userService'
 
 function RecuperarSenha({ irParaLogin }) {
   const [email, setEmail] = useState('')
@@ -138,27 +138,15 @@ function RecuperarSenha({ irParaLogin }) {
 
     setCarregando(true)
 
-    const { data, error } = await supabase
-      .from('usuarios')
-      .select('id, nome, email')
-      .eq('email', emailDigitado)
-      .maybeSingle()
-
-    setCarregando(false)
-
-    if (error) {
-      console.log('Erro Supabase:', error)
-      setErro('Não foi possível consultar o banco agora.')
-      return
+    try {
+      const data = await buscarPorEmail(emailDigitado)
+      setUsuarioEncontrado(data)
+      setSucesso(`Conta encontrada para ${data.nome}. Digite sua nova senha.`)
+    } catch (err) {
+      setErro(err.message)
+    } finally {
+      setCarregando(false)
     }
-
-    if (!data) {
-      setErro('Nenhuma conta foi encontrada com este email.')
-      return
-    }
-
-    setUsuarioEncontrado(data)
-    setSucesso(`Conta encontrada para ${data.nome}. Digite sua nova senha.`)
   }
 
   async function handleTrocarSenha(event) {
@@ -178,20 +166,16 @@ function RecuperarSenha({ irParaLogin }) {
 
     setCarregando(true)
 
-    const { error } = await supabase
-      .from('usuarios')
-      .update({ senha: senhaDigitada })
-      .eq('id', usuarioEncontrado.id)
-
-    setCarregando(false)
-
-    if (error) {
-      console.log('Erro Supabase:', error)
-      setErro(`Erro ao trocar senha: ${error.message}`)
+    try {
+      await atualizarSenha(usuarioEncontrado.id, senhaDigitada)
+      setSucesso('Senha alterada com sucesso! Você já pode voltar para o login.')
+    } catch (err) {
+      setErro(err.message)
+      setCarregando(false)
       return
     }
 
-    setSucesso('Senha alterada com sucesso! Você já pode voltar para o login.')
+    setCarregando(false)
     setNovaSenha('')
     setConfirmarSenha('')
     setErrosCampos({
