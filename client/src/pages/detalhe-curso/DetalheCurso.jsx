@@ -15,6 +15,14 @@ import {
 // Defaults estáticos para o layout — campos que ainda não existem
 // no schema do MongoDB. Quando o back-end for enriquecido, basta
 // remover daqui e os dados reais virão por ...raw.
+// Extrai até 2 iniciais do nome completo
+function getIniciais(nome = '') {
+  const partes = nome.trim().split(/\s+/).filter(Boolean)
+  if (partes.length === 0) return '?'
+  if (partes.length === 1) return partes[0][0].toUpperCase()
+  return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase()
+}
+
 function enriquecerCurso(raw) {
   return {
     ...raw,
@@ -30,7 +38,6 @@ function enriquecerCurso(raw) {
     ],
     instrutor: {
       nome:          raw.instrutor?.nome          ?? raw.professor ?? 'Instrutor',
-      avatar:        raw.instrutor?.avatar        ?? `https://i.pravatar.cc/80?u=${raw._id}`,
       especialidade: raw.instrutor?.especialidade ?? 'Especialista na área',
       avaliacao:     raw.instrutor?.avaliacao     ?? raw.avaliacao ?? 4.9,
       alunos:        raw.instrutor?.alunos        ?? raw.alunos    ?? 0,
@@ -217,7 +224,9 @@ function DetalheCurso({ cursoInicial, usuario, aoNavegar, aoVoltar }) {
 
         <section className="det-secao">
           <div className="det-instrutor">
-            <img src={curso.instrutor.avatar} alt={curso.instrutor.nome} className="det-instrutor-avatar" />
+            <div className="det-instrutor-avatar">
+              {getIniciais(curso.instrutor.nome)}
+            </div>
             <div>
               <h3 className="det-instrutor-nome">{curso.instrutor.nome}</h3>
               <p className="det-instrutor-especialidade">{curso.instrutor.especialidade}</p>
@@ -363,7 +372,9 @@ function DetalheCurso({ cursoInicial, usuario, aoNavegar, aoVoltar }) {
             )}
 
             <div className="det-hero-instrutor">
-              <img src={curso.instrutor.avatar} alt={curso.instrutor.nome} />
+              <div className="det-hero-instrutor-avatar">
+                {getIniciais(curso.instrutor.nome)}
+              </div>
               <div>
                 <span className="det-hero-instrutor-nome">{curso.instrutor.nome}</span>
                 <span className="det-hero-instrutor-cargo">Instrutor principal</span>

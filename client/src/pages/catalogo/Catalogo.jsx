@@ -136,10 +136,17 @@ function normalizarCurso(raw) {
     progresso:       raw.progresso       ?? null,
     thumbnail:       raw.thumbnail       ?? 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=220&fit=crop',
     instrutor: {
-      nome:   raw.instrutor?.nome   ?? raw.professor ?? 'Instrutor',
-      avatar: raw.instrutor?.avatar ?? `https://i.pravatar.cc/32?u=${raw._id}`,
+      nome: raw.instrutor?.nome ?? raw.professor ?? 'Instrutor',
     },
   }
+}
+
+// Extrai até 2 iniciais do nome completo
+function getIniciais(nome = '') {
+  const partes = nome.trim().split(/\s+/).filter(Boolean)
+  if (partes.length === 0) return '?'
+  if (partes.length === 1) return partes[0][0].toUpperCase()
+  return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase()
 }
 
 // ── Card individual de curso ──
@@ -186,7 +193,7 @@ function CardCurso({ curso, aoVerDetalhe }) {
 
         {/* Instrutor */}
         <div className="cat-card-instrutor">
-          <img src={curso.instrutor.avatar} alt={curso.instrutor.nome} className="cat-card-instrutor-avatar" />
+          <span className="cat-card-instrutor-avatar">{getIniciais(curso.instrutor.nome)}</span>
           <span>{curso.instrutor.nome}</span>
         </div>
 

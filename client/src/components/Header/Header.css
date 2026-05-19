@@ -128,11 +128,7 @@
   background: linear-gradient(135deg, #630ed4, #9d50ff);
   overflow: hidden;
   border: 2px solid rgba(124, 58, 237, 0.2);
-}
-
-.header-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
