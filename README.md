@@ -403,6 +403,10 @@ Base URL: `http://localhost:3000/api`
 Projeto desenvolvido para a disciplina **Performance e Tunning de Dados** — FEI.
 
 - **Repositório:** <https://github.com/BrunoBudan0/Tunning-de-Dados>
+- **Equipe:**
+- **Bruno Budano Mello**
+- **Gabriel Andrade Rosa Oliveira**
+- **Luanna Pinto Gonçalves**
 
 ---
 
